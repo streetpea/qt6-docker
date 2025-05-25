@@ -3,9 +3,9 @@
 FROM ubuntu:20.04
 
 # PIP requirement like "aqtinstall==2.0.6" or url with egg file
-ARG AQT_VERSION="aqtinstall==3.1.13"
+ARG AQT_VERSION="aqtinstall==3.2.1"
 
-ARG QT_VERSION=6.9.0
+ARG QT_VERSION=6.9.*
 # LINUXDEPLOY_COMMIT Jan 3, 2024
 ARG LINUXDEPLOY_COMMIT=2b73a2173f8acfc0269e681bdb28ebf65b0b4b48
 # LINUXDEPLOY_QT_COMMIT Apr 25, 2024

@@ -22,8 +22,14 @@ echo
 echo '--> Install the required packages to install Qt'
 echo
 
-apt install -y git python3-pip libglib2.0-0
-pip3 install --no-cache-dir "$AQT_VERSION"
+apt install -y wget git libglib2.0-0 software-properties-common
+add-apt-repository ppa:deadsnakes
+apt update
+apt install -y python3.12-dev
+wget https://bootstrap.pypa.io/get-pip.py
+python3.12 get-pip.py
+python3.12 -m pip install --upgrade six urllib3[secure]
+python3.12 -m pip install --upgrade "$AQT_VERSION"
 
 echo
 echo '--> Download & install the Qt library using aqt'

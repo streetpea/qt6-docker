@@ -1,4 +1,4 @@
-name: Build docker qt6 image
+name: Build chiaki-ng builder image
 
 on:
   workflow_dispatch:
@@ -6,8 +6,8 @@ env:
   QT_VER: 6.9
   DOCKER_USER: streetpea
 jobs:
-  build-qt6-image_x64:
-    name: Build qt6 image x64
+  build-chiaking-image_x64:
+    name: Build chiaki-ng image x64
     runs-on: ubuntu-latest
     
     steps:
@@ -23,25 +23,24 @@ jobs:
           path: 'qt6-docker'
 
       - name: Run build script
-        working-directory: chiaki-ng
+        working-directory: qt6-docker
         run: |
           set -xe
-          podman build -t docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:${{ env.QT_VER }}-$(uname -m) \
+          podman build -t docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }}-$(uname -m) \
           -f chiaki-ng-docker/Dockerfile.qt6 \
           chiaki-ng-docker
 
       - name: Login to podman repo
-        run:
-          echo "{{ secrets.DockerToken }}" |  podman login docker.io -u ${{ env.DOCKER_USER }} --password-stdin
+        run: |
+          echo ${{ secrets.DOCKERTOKEN }} |  podman login docker.io -u ${{ env.DOCKER_USER }} --password-stdin
 
       - name: Push build
-        working-directory: chiaki-ng
         run: |
           set -xe
-          podman push docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:${{ env.QT_VER }}-$(uname -m)
+          podman push docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }}-$(uname -m)
 
-  build-qt6-image_arm64:
-    name: Build qt6 image arm64
+  build-chiaking-image_arm64:
+    name: Build chiaki-ng image arm64
     runs-on: ubuntu-24.04-arm
     steps:
       - name: Setup Podman
@@ -56,27 +55,28 @@ jobs:
           path: 'qt6-docker'
 
       - name: Run build script
-        working-directory: chiaki-ng
+        working-directory: qt6-docker
         run: |
           set -xe
-          podman build -t docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:${{ env.QT_VER }}-$(uname -m) \
+          podman build -t docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }}-$(uname -m) \
           -f chiaki-ng-docker/Dockerfile.qt6 \
           chiaki-ng-docker
 
       - name: Login to podman repo
-        run:
-          echo "{{ secrets.DockerToken }}" |  podman login docker.io -u ${{ env.DOCKER_USER }} --password-stdin
+        run: |
+          echo ${{ secrets.DOCKERTOKEN }} |  podman login docker.io -u ${{ env.DOCKER_USER }} --password-stdin
 
       - name: Push build
-        working-directory: chiaki-ng
         run: |
           set -xe
-          podman push docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:${{ env.QT_VER }}-$(uname -m)
+          podman push docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }}-$(uname -m)
 
-  build-qt6-manifest:
-    name: Build qt6 image x64
+  build-chiaking-multiarch:
+    name: Build chiaki-ng image multiarch
     runs-on: ubuntu-latest
-    needs: [ build-qt6-image_x64 build-qt6-image_arm64 ]
+    needs: 
+      - build-chiaking-image_x64
+      - build-chiaking-image_arm64
     steps:
       - name: Setup Podman
         run: |
@@ -84,19 +84,17 @@ jobs:
           sudo apt-get -y install podman
 
       - name: Create manifest
-        working-directory: chiaki-ng
         run: |
           set -xe
-          podman manifest create docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:${{ env.QT_VER }} \
-          docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:${{ env.QT_VER }}-aarch64 \
-          docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:${{ env.QT_VER }}-x86_64
+          podman manifest create docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }} \
+          docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }}-aarch64 \
+          docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }}-x86_64
 
       - name: Login to podman repo
-        run:
-          echo "{{ secrets.DockerToken }}" |  podman login docker.io -u ${{ env.DOCKER_USER }} --password-stdin
+        run: |
+          echo ${{ secrets.DOCKERTOKEN }} |  podman login docker.io -u ${{ env.DOCKER_USER }} --password-stdin
 
       - name: Push build
-        working-directory: chiaki-ng
         run: |
           set -xe
-          podman push docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:${{ env.QT_VER }}
+          podman push docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }}
