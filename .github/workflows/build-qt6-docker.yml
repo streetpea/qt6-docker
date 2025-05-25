@@ -27,7 +27,7 @@ jobs:
         run: |
           set -xe
           podman build -t docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.QT_VER }}-gcc-aqt-$(uname -m) \
-          -f ${{ env.QT_VER }}-gcc-aqt/Dockerfile \
+          -f ${{ env.QT_VER }}-gcc-aqt/Dockerfile-$(uname -m) \
           ${{ env.QT_VER }}-gcc-aqt
 
       - name: Login to podman repo
@@ -59,7 +59,7 @@ jobs:
         run: |
           set -xe
           podman build -t docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.QT_VER }}-gcc-aqt-$(uname -m) \
-          -f ${{ env.QT_VER }}-gcc-aqt/Dockerfile \
+          -f ${{ env.QT_VER }}-gcc-aqt/Dockerfile-$(uname -m) \
           ${{ env.QT_VER }}-gcc-aqt
 
       - name: Login to podman repo

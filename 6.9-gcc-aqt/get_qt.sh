@@ -46,7 +46,7 @@ aqt install-qt -O "$QT_PATH" linux${arm_string} desktop "$QT_VERSION" linux_gcc$
 aqt install-tool -O "$QT_PATH" linux${arm_string} desktop tools_cmake
 aqt install-tool -O "$QT_PATH" linux${arm_string} desktop tools_ninja
 
-pip3 freeze | xargs pip3 uninstall -y
+pip3 freeze | xargs pip3 uninstall -y || true
 
 echo
 echo '--> Restore the packages list to the original state'
