@@ -48,6 +48,19 @@ Dockerhub: https://hub.docker.com/r/stateoftheartio/qt6
 * 6.2-gcc-src - Linux GCC 64 built from sources (not ready)
 * 6.2-android-src - Android Clang toolkit for x86_64, x86, armv7 and arm64_v8a built from sources (not ready)
 
+## Build chiaki-ng images
+
+1. Build base image
+
+    ```
+    docker buildx build --platform=linux/amd64,linux/arm64 --push -t streetpea/qt6:6.7-gcc-aqt -f 6.7-gcc-aqt/Dockerfile 6.7-gcc-aqt/
+    ```
+
+2. Build builder image
+
+    ```
+    docker buildx build --platform=linux/amd64,linux/arm64 --push -t streetpea/chiaki-ng-builder:qt6.7 -f chiaki-ng-docker/Dockerfile.qt6 chiaki-ng-docker
+    ```
 ## How to build the image
 
 Just go into the required directory and run:
