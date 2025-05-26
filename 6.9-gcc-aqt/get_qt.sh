@@ -25,7 +25,9 @@ echo
 apt install -y wget git libglib2.0-0 software-properties-common
 add-apt-repository ppa:deadsnakes
 apt update
-apt install -y python3.12-dev
+apt install -y python3.12-dev python3.12-venv
+python3.12 -m venv myvenv
+ENV PATH="$PWD/venv/bin:$PATH"
 wget https://bootstrap.pypa.io/get-pip.py
 python3.12 get-pip.py
 python3.12 -m pip install --upgrade six urllib3[secure]
