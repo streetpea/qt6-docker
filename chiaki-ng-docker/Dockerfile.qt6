@@ -34,6 +34,7 @@ RUN sudo apt-get -y install \
     libdrm-dev \
     liblcms2-dev \
     libvulkan-dev \
+    libv4l-dev \
     libxkbcommon-dev \
     libasound2-dev  \
     libminiupnpc-dev \
