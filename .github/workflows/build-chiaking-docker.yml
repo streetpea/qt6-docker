@@ -3,7 +3,7 @@ name: Build chiaki-ng builder image
 on:
   workflow_dispatch:
 env:
-  QT_VER: 6.9
+  QT_VER: 6.8
   DOCKER_USER: streetpea
 jobs:
   build-chiaking-image_x64:

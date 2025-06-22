@@ -3,7 +3,7 @@ name: Build docker qt6 image
 on:
   workflow_dispatch:
 env:
-  QT_VER: 6.9
+  QT_VER: 6.8
   DOCKER_USER: streetpea
 jobs:
   build-qt6-image_x64:
