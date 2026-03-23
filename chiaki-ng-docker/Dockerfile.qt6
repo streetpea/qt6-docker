@@ -6,7 +6,9 @@ RUN sudo DEBIAN_FRONTEND=noninteractive apt-get install -y software-properties-c
 RUN sudo add-apt-repository ppa:deadsnakes/ppa
 RUN sudo apt-get update
 RUN sudo apt-get -y install \
+    build-essential \
     git \
+    make \
     g++ \
     ninja-build \
     curl \
@@ -14,12 +16,23 @@ RUN sudo apt-get -y install \
     unzip \
     python3-pip \
     python3-venv \
+    gnome-desktop-testing \
     libglib2.0-0 \
     libssl-dev \
     libopus-dev  \
+    libpulse-dev \
+    libaudio-dev \
+    libfribidi-dev \
+    libjack-dev \
+    libsndio-dev \
     libgl1-mesa-dev \
+    libgles2-mesa-dev \
+    libegl1-mesa-dev \
     nasm \
+    libdbus-1-dev \
+    libibus-1.0-dev \
     libudev-dev \
+    libthai-dev \
     librsvg2-dev \
     gobject-introspection \
     libva-dev \
@@ -27,18 +40,25 @@ RUN sudo apt-get -y install \
     appstream \
     file \
     libevdev-dev \
-    libudev-dev \
     libhidapi-dev \
     libfftw3-dev \
     libspeexdsp-dev \
     libdrm-dev \
+    libgbm-dev \
     liblcms2-dev \
     libvulkan-dev \
+    libx11-dev \
+    libxext-dev \
+    libxrandr-dev \
+    libxcursor-dev \
+    libxfixes-dev \
+    libxi-dev \
+    libxss-dev \
+    libxtst-dev \
     libxkbcommon-dev \
     libasound2-dev  \
     libminiupnpc-dev \
-    libjson-c-dev \
-    libxcursor-dev
+    libjson-c-dev
 
 RUN python3 -m venv "$HOME/chiaki-venv"
 ENV PATH="$HOME/chiaki-venv/bin:$PATH"
