@@ -11,6 +11,7 @@ on:
         options:
           - 6.9
           - 6.8
+          - 6.7
 env:
   QT_VER: ${{ inputs.QT_VER }}
   DOCKER_USER: streetpea
