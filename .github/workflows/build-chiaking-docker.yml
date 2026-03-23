@@ -2,8 +2,17 @@ name: Build chiaki-ng builder image
 
 on:
   workflow_dispatch:
+    inputs:
+      QT_VER:
+        description: 'QT version'
+        required: true
+        default: '6.9'
+        type: choice
+        options:
+          - 6.9
+          - 6.8
 env:
-  QT_VER: 6.9
+  QT_VER: ${{ inputs.QT_VER }}
   DOCKER_USER: streetpea
 jobs:
   build-chiaking-image_x64:
