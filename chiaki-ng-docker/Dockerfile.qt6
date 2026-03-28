@@ -58,7 +58,8 @@ RUN sudo apt-get -y install \
     libxkbcommon-dev \
     libasound2-dev  \
     libminiupnpc-dev \
-    libjson-c-dev
+    libjson-c-dev \
+    libevent-dev
 
 RUN python3 -m venv "$HOME/chiaki-venv"
 ENV PATH="$HOME/chiaki-venv/bin:$PATH"
