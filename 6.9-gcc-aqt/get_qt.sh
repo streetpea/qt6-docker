@@ -25,9 +25,10 @@ echo
 apt install -y wget git libglib2.0-0 python3-venv
 python3 -m venv /tmp/uv-venv
 /tmp/uv-venv/bin/pip install uv
-# aqt needs Python 3.10 or newer; uv downloads one where the system's is older (Ubuntu 20.04)
+# aqt needs Python 3.10 or newer, and its 7z modules ship wheels for 3.12; uv uses the system's
+# where it is 3.12 (Ubuntu 24.04) and downloads it elsewhere
 export UV_PYTHON_INSTALL_DIR=/tmp/uv-python
-/tmp/uv-venv/bin/uv venv --seed --python '>=3.10' /tmp/aqt-venv
+/tmp/uv-venv/bin/uv venv --seed --python 3.12 /tmp/aqt-venv
 . /tmp/aqt-venv/bin/activate
 pip install --upgrade "$AQT_VERSION"
 
