@@ -21,7 +21,9 @@ echo
 apt install -y apt-file
 apt-file update
 
-while read line ; do apt-file find $line | grep '^lib' | head -1; done < /tmp/not_found_libs.lst | tee /tmp/to_install_libs.lst
+# Skip vendor GPU driver packages (e.g. libegl-mali-xlnx on arm64), which divert Mesa's
+# libgbm and libEGL to libraries that lack symbols Qt WebEngine needs
+while read line ; do apt-file find $line | grep '^lib' | grep -v -e '-mali-' | head -1; done < /tmp/not_found_libs.lst | tee /tmp/to_install_libs.lst
 
 # TODO: Clean apt-file cache
 
