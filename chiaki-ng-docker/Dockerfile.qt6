@@ -1,4 +1,5 @@
-FROM docker.io/streetpea/qt6:6.9-gcc-aqt
+ARG QT_IMAGE=6.9
+FROM docker.io/streetpea/qt6:${QT_IMAGE}-gcc-aqt
 
 RUN sudo apt-get update
 RUN sudo ln -fs /usr/share/zoneinfo/UTC /etc/localtime

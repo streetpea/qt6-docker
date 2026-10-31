@@ -12,8 +12,14 @@ on:
           - 6.9
           - 6.8
           - 6.7
+      TAG:
+        description: 'Image tag (defaults to the QT version)'
+        required: false
+        default: ''
+        type: string
 env:
   QT_VER: ${{ inputs.QT_VER }}
+  TAG: ${{ inputs.TAG || inputs.QT_VER }}
   DOCKER_USER: streetpea
 jobs:
   build-chiaking-image_x64:
@@ -36,7 +42,8 @@ jobs:
         working-directory: qt6-docker
         run: |
           set -xe
-          podman build -t docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }}-$(uname -m) \
+          podman build -t docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.TAG }}-$(uname -m) \
+          --build-arg QT_IMAGE=${{ env.TAG }} \
           -f chiaki-ng-docker/Dockerfile.qt6 \
           chiaki-ng-docker
 
@@ -47,7 +54,7 @@ jobs:
       - name: Push build
         run: |
           set -xe
-          podman push docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }}-$(uname -m)
+          podman push docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.TAG }}-$(uname -m)
 
   build-chiaking-image_arm64:
     name: Build chiaki-ng image arm64
@@ -68,7 +75,8 @@ jobs:
         working-directory: qt6-docker
         run: |
           set -xe
-          podman build -t docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }}-$(uname -m) \
+          podman build -t docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.TAG }}-$(uname -m) \
+          --build-arg QT_IMAGE=${{ env.TAG }} \
           -f chiaki-ng-docker/Dockerfile.qt6 \
           chiaki-ng-docker
 
@@ -79,7 +87,7 @@ jobs:
       - name: Push build
         run: |
           set -xe
-          podman push docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }}-$(uname -m)
+          podman push docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.TAG }}-$(uname -m)
 
   build-chiaking-multiarch:
     name: Build chiaki-ng image multiarch
@@ -96,9 +104,9 @@ jobs:
       - name: Create manifest
         run: |
           set -xe
-          podman manifest create docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }} \
-          docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }}-aarch64 \
-          docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }}-x86_64
+          podman manifest create docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.TAG }} \
+          docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.TAG }}-aarch64 \
+          docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.TAG }}-x86_64
 
       - name: Login to podman repo
         run: |
@@ -107,4 +115,4 @@ jobs:
       - name: Push build
         run: |
           set -xe
-          podman push docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.QT_VER }}
+          podman push docker.io/${{ env.DOCKER_USER }}/chiaki-ng-builder:qt${{ env.TAG }}

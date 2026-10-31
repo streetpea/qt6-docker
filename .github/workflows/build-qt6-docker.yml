@@ -12,8 +12,14 @@ on:
           - 6.9
           - 6.8
           - 6.7
+      TAG:
+        description: 'Image tag (defaults to the QT version)'
+        required: false
+        default: ''
+        type: string
 env:
   QT_VER: ${{ inputs.QT_VER }}
+  TAG: ${{ inputs.TAG || inputs.QT_VER }}
   DOCKER_USER: streetpea
 jobs:
   build-qt6-image_x64:
@@ -36,7 +42,7 @@ jobs:
         working-directory: qt6-docker
         run: |
           set -xe
-          podman build -t docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.QT_VER }}-gcc-aqt-$(uname -m) \
+          podman build -t docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.TAG }}-gcc-aqt-$(uname -m) \
           -f ${{ env.QT_VER }}-gcc-aqt/Dockerfile-$(uname -m) \
           ${{ env.QT_VER }}-gcc-aqt
 
@@ -47,7 +53,7 @@ jobs:
       - name: Push build
         run: |
           set -xe
-          podman push docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.QT_VER }}-gcc-aqt-$(uname -m)
+          podman push docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.TAG }}-gcc-aqt-$(uname -m)
 
   build-qt6-image_arm64:
     name: Build qt6 image arm64
@@ -68,7 +74,7 @@ jobs:
         working-directory: qt6-docker
         run: |
           set -xe
-          podman build -t docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.QT_VER }}-gcc-aqt-$(uname -m) \
+          podman build -t docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.TAG }}-gcc-aqt-$(uname -m) \
           -f ${{ env.QT_VER }}-gcc-aqt/Dockerfile-$(uname -m) \
           ${{ env.QT_VER }}-gcc-aqt
 
@@ -79,7 +85,7 @@ jobs:
       - name: Push build
         run: |
           set -xe
-          podman push docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.QT_VER }}-gcc-aqt-$(uname -m)
+          podman push docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.TAG }}-gcc-aqt-$(uname -m)
 
   build-qt6-multiarch:
     name: Build qt6 image multiarch
@@ -96,9 +102,9 @@ jobs:
       - name: Create manifest
         run: |
           set -xe
-          podman manifest create docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.QT_VER }}-gcc-aqt \
-          docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.QT_VER }}-gcc-aqt-aarch64 \
-          docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.QT_VER }}-gcc-aqt-x86_64
+          podman manifest create docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.TAG }}-gcc-aqt \
+          docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.TAG }}-gcc-aqt-aarch64 \
+          docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.TAG }}-gcc-aqt-x86_64
 
       - name: Login to podman repo
         run: |
@@ -107,4 +113,4 @@ jobs:
       - name: Push build
         run: |
           set -xe
-          podman push docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.QT_VER }}-gcc-aqt
+          podman push docker.io/${{ env.DOCKER_USER }}/qt6:${{ env.TAG }}-gcc-aqt
