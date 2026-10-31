@@ -22,16 +22,14 @@ echo
 echo '--> Install the required packages to install Qt'
 echo
 
-apt install -y wget git libglib2.0-0 software-properties-common
-add-apt-repository ppa:deadsnakes
-apt update
-apt install -y python3.12-dev python3.12-venv
-python3.12 -m venv myvenv
-ENV PATH="$PWD/venv/bin:$PATH"
-wget https://bootstrap.pypa.io/get-pip.py
-python3.12 get-pip.py
-python3.12 -m pip install --upgrade six urllib3[secure]
-python3.12 -m pip install --upgrade "$AQT_VERSION"
+apt install -y wget git libglib2.0-0 python3-venv
+python3 -m venv /tmp/uv-venv
+/tmp/uv-venv/bin/pip install uv
+# aqt needs Python 3.10 or newer; uv downloads one where the system's is older (Ubuntu 20.04)
+export UV_PYTHON_INSTALL_DIR=/tmp/uv-python
+/tmp/uv-venv/bin/uv venv --seed --python '>=3.10' /tmp/aqt-venv
+. /tmp/aqt-venv/bin/activate
+pip install --upgrade "$AQT_VERSION"
 
 echo
 echo '--> Download & install the Qt library using aqt'
@@ -48,7 +46,8 @@ aqt install-qt -O "$QT_PATH" linux${arm_string} desktop "$QT_VERSION" linux_gcc$
 aqt install-tool -O "$QT_PATH" linux${arm_string} desktop tools_cmake
 aqt install-tool -O "$QT_PATH" linux${arm_string} desktop tools_ninja
 
-pip3 freeze | xargs pip3 uninstall -y || true
+deactivate
+rm -rf /tmp/aqt-venv /tmp/uv-venv /tmp/uv-python
 
 echo
 echo '--> Restore the packages list to the original state'
